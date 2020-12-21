@@ -1,5 +1,6 @@
 ﻿using PZU.CSharp.Reports.Models;
 using System;
+using System.Collections.Generic;
 
 namespace PZU.CSharp.Reports
 {
@@ -9,30 +10,46 @@ namespace PZU.CSharp.Reports
         {
             // ReportTest();
 
-            int? x = null;
+            // ArrayTest();
 
-            string name;
-            DateTime? date;
+            // Lista
+            List<int> numbers = new List<int>();
 
-            if (x.HasValue)
+            numbers.Add(20);
+            numbers.Add(30);
+            numbers.Add(10);
+
+            //for(int i= 0; i < numbers.Count; i++)
+            //{
+            //    Console.WriteLine(numbers[i]);
+            //}
+
+            foreach(int number in numbers)
             {
-                int z = x.Value + 10;
+                Console.WriteLine(number);
             }
 
-            int?[] numbers = new int?[10];
-            numbers[0] = 20;
-            numbers[1] = 30;
-            numbers[2] = 10;
 
-            for(int i = 0; i < numbers.Length; i++)
-            {
-                Console.WriteLine(numbers[i]);
-            }
+            List<Report> reports = new List<Report>();
 
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
 
+        }
+
+        // Struktura tablicowa (stała ilość elementów)
+        private static void ArrayTest()
+        {
+            int?[] numbers = new int?[10];
+            numbers[0] = 20;
+            numbers[1] = 30;
+            numbers[2] = 10;
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                Console.WriteLine(numbers[i]);
+            }
         }
 
         private static void ReportTest()
