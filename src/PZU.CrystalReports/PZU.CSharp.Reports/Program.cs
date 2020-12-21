@@ -15,7 +15,30 @@ namespace PZU.CSharp.Reports
             // Lista
             // ListTest();
 
-            ReportsTest();
+            // ReportsTest();
+
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "");
+
+            Console.WriteLine(path);
+
+            if (System.IO.Directory.Exists(path))
+            {
+                string[] files = System.IO.Directory.GetFiles(path);
+
+                foreach (string file in files)
+                {
+                    Console.WriteLine(file);
+                    Console.WriteLine(System.IO.Path.GetFileName(file));
+                    Console.WriteLine(System.IO.Path.GetFileNameWithoutExtension(file));
+
+                    // copy of plik1.txt
+                    System.IO.File.Copy(file, System.IO.Path.Combine(path, System.IO.Path.GetRandomFileName()));
+                }
+            }
+            else
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
