@@ -13,6 +13,36 @@ namespace PZU.CSharp.Reports
             // ArrayTest();
 
             // Lista
+            // ListTest();
+
+            ReportsTest();
+
+            Console.WriteLine("Press any key to exit.");
+            Console.ReadKey();
+
+        }
+
+        private static void ReportsTest()
+        {
+            List<Report> reports = new List<Report>();
+
+            Report report1 = new Report("Raport 1", "report1.rpt");
+            reports.Add(report1);
+
+            report1 = new Report("Raport 2", "report2.rpt");
+            reports.Add(report1);
+
+            report1 = new Report("Raport 3", "report3.rpt");
+            reports.Add(report1);
+
+            foreach (Report report in reports)
+            {
+                report.Generate();
+            }
+        }
+
+        private static void ListTest()
+        {
             List<int> numbers = new List<int>();
 
             numbers.Add(20);
@@ -24,18 +54,10 @@ namespace PZU.CSharp.Reports
             //    Console.WriteLine(numbers[i]);
             //}
 
-            foreach(int number in numbers)
+            foreach (int number in numbers)
             {
                 Console.WriteLine(number);
             }
-
-
-            List<Report> reports = new List<Report>();
-
-
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
-
         }
 
         // Struktura tablicowa (stała ilość elementów)
