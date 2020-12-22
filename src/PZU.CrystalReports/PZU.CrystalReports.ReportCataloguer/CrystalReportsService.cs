@@ -43,7 +43,7 @@ namespace PZU.CrystalReports.ReportCataloguer
                 if (element.ClassName == "CrystalReports.Table")
                 {
                     Console.WriteLine($"{element.Name} {element.ClassName}");
-                    File.AppendAllText(filename, $"{reportname};{mainReportName};{element.Name};{element.ClassName};{Environment.NewLine}");
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};{element.Name};\"Table\";{Environment.NewLine}");
                 }
 
                 else
@@ -53,13 +53,13 @@ namespace PZU.CrystalReports.ReportCataloguer
 
                     string sql = command.CommandText.Replace(Environment.NewLine, string.Empty);
 
-                    File.AppendAllText(filename, $"{reportname};{mainReportName};{command.Name};{command.ClassName};\"{sql}\";{Environment.NewLine}");
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};{command.Name};\"SQL Command\";\"{sql}\";{Environment.NewLine}");
 
                 }
                 else
                 if (element.ClassName == "CrystalReports.Procedure")
                 {
-                    File.AppendAllText(filename, $"{reportname};{mainReportName};\"{element.Name}\";{element.ClassName};{Environment.NewLine}");
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};\"{element.Name}\";\"Stored procedure\";{Environment.NewLine}");
                 }
             }
         }
