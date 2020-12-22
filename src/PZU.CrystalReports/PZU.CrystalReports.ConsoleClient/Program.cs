@@ -40,6 +40,18 @@ namespace PZU.CrystalReports.ConsoleClient
             Console.ReadLine();
         }
 
+
+        private static void GenerateReport(ReportDocument report)
+        {
+            report.SetParameterValue("Rok", 2020);
+
+            report.ExportToDisk(ExportFormatType.PortableDocFormat, "raport1.pdf");
+
+            ExcelFormatOptions excelFormatOptions = ExportOptions.CreateExcelFormatOptions();
+            excelFormatOptions.ShowGridLines = true;
+
+        }
+
         private static void SetLocation(ReportDocument report)
         {
             ConnectionInfo targetConnection = new ConnectionInfo();
