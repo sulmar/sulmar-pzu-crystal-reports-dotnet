@@ -21,7 +21,8 @@ namespace PZU.CrystalReports.ReportCataloguer
 
             string[] files = Directory.GetFiles(path, "*.rpt");
 
-           
+
+            File.AppendAllText(filename, $"Reportname;MainReportName;Name;Typ;SQL;{Environment.NewLine}");
 
             foreach (string file in files)
             {
@@ -71,6 +72,9 @@ namespace PZU.CrystalReports.ReportCataloguer
                 var elements = report.ReportClientDocument.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
 
                 string reportname = Path.GetFileNameWithoutExtension(file);
+
+               
+
 
                 Process(filename, reportname, string.Empty, elements);
 
