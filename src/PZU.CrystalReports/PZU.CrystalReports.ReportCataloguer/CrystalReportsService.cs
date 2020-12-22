@@ -21,8 +21,7 @@ namespace PZU.CrystalReports.ReportCataloguer
 
             string[] files = Directory.GetFiles(path, "*.rpt");
 
-
-            File.AppendAllText(filename, $"Reportname;MainReportName;Name;Typ;SQL;{Environment.NewLine}");
+            AddHeader(filename);
 
             foreach (string file in files)
             {
@@ -30,6 +29,11 @@ namespace PZU.CrystalReports.ReportCataloguer
             }
 
             Console.WriteLine($"Generowanie pliku {filename}...");
+        }
+
+        private static void AddHeader(string filename)
+        {
+            File.AppendAllText(filename, $"Reportname;MainReportName;Name;Typ;SQL;{Environment.NewLine}");
         }
 
         private void Process(string filename, string reportname, string mainReportName, IEnumerable<CrystalDecisions.ReportAppServer.DataDefModel.Table> elements)
