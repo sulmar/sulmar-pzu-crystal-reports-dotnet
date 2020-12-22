@@ -16,7 +16,9 @@ namespace PZU.CrystalReports.ConsoleClient
             // Przykład:
             // reportcataloger.exe c:\temp\reports c:\temp\catalog.csv
 
-            string path = System.IO.Path.Combine( System.IO.Directory.GetCurrentDirectory(), "Reports");
+            // string path = System.IO.Path.Combine( System.IO.Directory.GetCurrentDirectory(), "Reports");
+
+            string path = @"C:\temp\PZU\Reports";
 
             string[] files = System.IO.Directory.GetFiles(path, "*.rpt");
 
@@ -27,9 +29,36 @@ namespace PZU.CrystalReports.ConsoleClient
                 ReportDocument report = new ReportDocument();
                 report.Load(file);
 
-                foreach(Table table in report.Database.Tables)
+                foreach (Table table in report.Database.Tables)
                 {
                     Console.WriteLine(table.Name);
+                }
+
+                var parameters = report.ParameterFields;
+
+                foreach (CrystalDecisions.Shared.ParameterField parameter in parameters)
+                {
+                    Console.WriteLine($"{parameter.Name} {parameter.ParameterValueType}");
+                }
+
+                var formulaFields = report.DataDefinition.FormulaFields;
+
+                foreach (FormulaFieldDefinition formulaField in formulaFields)
+                {
+                    Console.WriteLine($"{formulaField.Name} {formulaField.Text}");
+                }
+
+                string formulaName = "Version";
+
+                try
+                {
+                    var formula = report.DataDefinition.FormulaFields[formulaName];
+                    formula.Text = "\"SABA 6.0\"";
+                    report.SaveAs(file);
+                }
+                catch(System.Runtime.InteropServices.COMException e)
+                {
+
                 }
 
                 // wyjście - plik CSV
