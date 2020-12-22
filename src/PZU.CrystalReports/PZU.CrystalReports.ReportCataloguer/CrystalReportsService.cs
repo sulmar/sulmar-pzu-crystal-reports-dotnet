@@ -31,6 +31,33 @@ namespace PZU.CrystalReports.ReportCataloguer
             Console.WriteLine($"Generowanie pliku {filename}...");
         }
 
+        private void Process(string filename, string reportname, string mainReportName, IEnumerable<CrystalDecisions.ReportAppServer.DataDefModel.Table> elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element.ClassName == "CrystalReports.Table")
+                {
+                    Console.WriteLine($"{element.Name} {element.ClassName}");
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};{element.Name};{element.ClassName};{Environment.NewLine}");
+                }
+
+                else
+                if (element.ClassName == "CrystalReports.CommandTable")   // SQL Command
+                {
+                    CrystalDecisions.ReportAppServer.DataDefModel.CommandTable command = (CrystalDecisions.ReportAppServer.DataDefModel.CommandTable)element;
+
+                    string sql = command.CommandText.Replace(Environment.NewLine, string.Empty);
+
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};{command.Name};{command.ClassName};\"{sql}\";{Environment.NewLine}");
+
+                }
+                else
+                if (element.ClassName == "CrystalReports.Procedure")
+                {
+                    File.AppendAllText(filename, $"{reportname};{mainReportName};\"{element.Name}\";{element.ClassName};{Environment.NewLine}");
+                }
+            }
+        }
 
         private void ProcessReport2(string file, string filename)
         {
@@ -43,29 +70,25 @@ namespace PZU.CrystalReports.ReportCataloguer
             {
                 var elements = report.ReportClientDocument.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
 
-                foreach (var element in elements)
+                string reportname = Path.GetFileNameWithoutExtension(file);
+
+                Process(filename, reportname, string.Empty, elements);
+
+                var subreportNames = report.ReportClientDocument.SubreportController.GetSubreportNames();
+
+                foreach (string subreportName in subreportNames)
                 {
-                    if (element.ClassName == "CrystalReports.Table")
-                    {
-                        Console.WriteLine($"{element.Name} {element.ClassName}");
-                        File.AppendAllText(filename, $"{file};{element.Name};{element.ClassName};{Environment.NewLine}");
-                    }
+                    var subreport = report.ReportClientDocument.SubreportController.GetSubreport(subreportName);
 
-                    else 
-                    if (element.ClassName == "CrystalReports.CommandTable")   // SQL Command
-                    {
-                        CrystalDecisions.ReportAppServer.DataDefModel.CommandTable command = (CrystalDecisions.ReportAppServer.DataDefModel.CommandTable) element;
+                    var subreportname = Path.GetFileNameWithoutExtension(subreport.Name);
 
-                        string sql = command.CommandText.Replace(Environment.NewLine, string.Empty);
+                    Console.WriteLine(subreportname);
 
-                        File.AppendAllText(filename, $"{file};{command.Name};{command.ClassName};\"{sql}\";{Environment.NewLine}");
+                    var subreportElements = subreport.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
 
-                    }
-                    else
-                    if (element.ClassName == "CrystalReports.Procedure")
-                    {
-                        File.AppendAllText(filename, $"{file};\"{element.Name}\";{element.ClassName};{Environment.NewLine}");
-                    }
+                    Process(filename, subreportname, reportname, subreportElements);
+
+
                 }
             }
         }
