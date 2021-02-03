@@ -69,35 +69,46 @@ namespace PZU.CrystalReports.ReportCataloguer
             Console.WriteLine($"Przetwarzanie raportu {file}...");
 
             ReportDocument report = new ReportDocument();
-            report.Load(file);
 
-            if (report.IsLoaded)
+            try
             {
-                var elements = report.ReportClientDocument.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
+                report.Load(file);
 
-                string reportname = Path.GetFileNameWithoutExtension(file);
-
-               
-
-
-                Process(filename, reportname, string.Empty, elements);
-
-                var subreportNames = report.ReportClientDocument.SubreportController.GetSubreportNames();
-
-                foreach (string subreportName in subreportNames)
+                if (report.IsLoaded)
                 {
-                    var subreport = report.ReportClientDocument.SubreportController.GetSubreport(subreportName);
+                    var elements = report.ReportClientDocument.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
 
-                    var subreportname = Path.GetFileNameWithoutExtension(subreport.Name);
-
-                    Console.WriteLine(subreportname);
-
-                    var subreportElements = subreport.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
-
-                    Process(filename, subreportname, reportname, subreportElements);
+                    string reportname = Path.GetFileNameWithoutExtension(file);
 
 
+                    Process(filename, reportname, string.Empty, elements);
+
+                    var subreportNames = report.ReportClientDocument.SubreportController.GetSubreportNames();
+
+                    foreach (string subreportName in subreportNames)
+                    {
+                        var subreport = report.ReportClientDocument.SubreportController.GetSubreport(subreportName);
+
+                        var subreportname = Path.GetFileNameWithoutExtension(subreport.Name);
+
+                        Console.WriteLine(subreportname);
+
+                        var subreportElements = subreport.DatabaseController.Database.Tables.OfType<CrystalDecisions.ReportAppServer.DataDefModel.Table>();
+
+                        Process(filename, subreportname, reportname, subreportElements);
+
+
+                    }
                 }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                report.Close();
+                report.Dispose();
             }
         }
 
